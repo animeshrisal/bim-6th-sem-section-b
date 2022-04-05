@@ -16,28 +16,9 @@ def about(request):
     return render(request, 'about.html')
 
 def get_movies(request):
-    page_size = 10
-
-    if page_number < 1:
-        page_number = 1
-
-    movie_count = Movie.objects.count()
-
-    last_page = math.ceil(movie_count / page_size)
-
-    pagination = {
-        'previous_page': page_number - 1,
-        'current_page': page_number,
-        'next_page': page_number + 1,
-        'last_page': last_page
-    }
-
-    movies = Movie.objects.all()[(page_number-1)
-                                 * page_size:page_number*page_size]
-
     movies = Movie.objects.all()
     return render(request, 'movies.html',
-     {'movies': movies, 'pagination': pagination})
+     {'movies': movies})
 
 def get_movie(request, id):
     try:
@@ -52,6 +33,13 @@ def get_movie(request, id):
 
         movie = Movie.objects.get(pk=id)
 
+        context = {
+            'is_favorite': False
+        }
+
+        if movie.favorite.filter(pk=request.user.pk).exists():
+            context['is_favorite'] = True
+
         reviews = Review.objects.filter(
             movie=movie
         ).order_by('-created_at')[0:4]
@@ -59,6 +47,7 @@ def get_movie(request, id):
         return render(request, 'movie.html', {'movie': movie,             
             'reviews': reviews,
             'review_form': review_form,
+            'context': context
             })
             
     except Movie.DoesNotExist:

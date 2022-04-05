@@ -10,5 +10,15 @@ urlpatterns = [
     path('signup/', views.signup),
     path('signin/', views.signin),
     path('signout/', views.signout),
- 
+    path('add_to_favorite/<int:id>', 
+            views.add_to_favorite, 
+            name="Add to favorite"),
+    path('remove_from_favorites/<int:id>',
+            views.remove_from_favorites, 
+            name="Remove from favorite"),
+
+    path('user_favorites/', 
+            views.get_user_favorites, 
+            name="Get User Favorites"),
+   
 ]

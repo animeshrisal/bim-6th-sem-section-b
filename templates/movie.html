@@ -6,6 +6,20 @@
     {{movie.genres}}
 
     {% if request.user.is_authenticated %}
+    {% if not context.is_favorite %}
+        <div>
+            <a href="/add_to_favorite/{{movie.id}}">
+                Add to favorite
+            </a>
+        </div>
+        {% else %}
+        <div>
+            <a href="/remove_from_favorites/{{movie.id}}">
+                Remove from favorites
+            </a>
+        </div>
+    {% endif %}
+
         <form action="/movies/{{movie.id}}/" method="POST">
             {% csrf_token %}
             {{ review_form.as_p }}
