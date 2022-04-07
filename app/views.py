@@ -6,7 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 
 from .forms import MovieForm, ReviewForm
 from .models import Movie, Review
-import math
+
+from django.core.paginator import Paginator
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -17,6 +18,12 @@ def about(request):
 
 def get_movies(request):
     movies = Movie.objects.all()
+
+    paginator = Paginator(movies, 1) # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    movies = paginator.get_page(page_number)
+
     return render(request, 'movies.html',
      {'movies': movies})
 
@@ -105,7 +112,6 @@ def add_to_favorite(request, id):
     movie.favorite.add(request.user)
 
     return redirect('/movies/{0}'.format(id))
-
 
 def remove_from_favorites(request, id):
     movie = Movie.objects.get(id=id)

@@ -6,6 +6,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=100)
     budget = models.BigIntegerField(blank=True, null=True)
     genres = models.TextField(blank=True, null=True)
+    
 
     favorite = models.ManyToManyField(User, related_name='favorite')
 
