@@ -19,7 +19,7 @@ def about(request):
 def get_movies(request):
     movies = Movie.objects.all()
 
-    paginator = Paginator(movies, 1) # Show 25 contacts per page.
+    paginator = Paginator(movies, 5) # Show 5 contacts per page.
 
     page_number = request.GET.get('page')
     movies = paginator.get_page(page_number)
@@ -122,3 +122,14 @@ def remove_from_favorites(request, id):
 def get_user_favorites(request):
     movies = request.user.favorite.all()
     return render(request, 'user_favorite.html', {'movies': movies})
+
+def search_movies(request):
+    search_term = request.GET.get('search', '')
+    if search_term != '':
+        movies = Movie.objects.filter(title__contains=search_term)
+    else:
+        movies = []
+    return render(request, 'search.html', 
+    {'movies': movies, 'search_term': search_term})
+
+    

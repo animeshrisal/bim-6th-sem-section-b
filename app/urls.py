@@ -18,7 +18,8 @@ urlpatterns = [
             name="Remove from favorite"),
 
     path('user_favorites/', 
-            views.get_user_favorites, 
-            name="Get User Favorites"),
+            views.get_user_favorites),
+
+    path('search_movies/', views.search_movies) 
    
 ]
